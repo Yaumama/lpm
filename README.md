@@ -19,4 +19,4 @@ LPM is completely open source and free to use.
 I am using github because it is the best place to post open source things, and I will be posting pre-release versions of LPM.
 
 ## Discord server
-You can join the official LPM discord server [here](https://discord.gg/3Py6pbRuVb).
+You can join the official LPM discord server [here](https://discord.gg/3Py6pbRuVb). The discord server is WIP.
