@@ -40,21 +40,46 @@ if "%~2" == "" (
 )
 
 if "%~1" == "install" (
-    if exist "./%~2.zip" (
-        echo You already installed %~2!
-        exit /b
+    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
+        if "%%A"=="200" (
+            if exist "./%~2.zip" (
+                echo You already installed %~2!
+                exit /b
+            )
+            if exist "./%~2" (
+                echo You already installed %~2!
+                exit /b
+            )
+            echo Installing...
+            powershell -Command "Invoke-WebRequest https://lpm.yaumama.repl.co/%~2/%~2.zip -Outfile %~2.zip"
+            echo Done installing!
+            echo Extracting...
+            powershell -Command "Expand-Archive %~2.zip -DestinationPath ./"
+            del "%~2.zip"
+            echo Extracted!
+            echo Successfully installed %~2!
+        ) else (
+            echo Package %~2 doesn't exist.
+        )
     )
-    if exist "./%~2" (
-        echo You already installed %~2!
-        exit /b
+    exit /b
+)
+
+if "%~1" == "uninstall" (
+    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
+        if "%%A"=="200" (
+            if exist "./%~2" (
+                echo Deleting...
+                rd /S /Q %~2
+                echo Deleted!
+                echo Successfully uninstalled %~2!
+            ) else (
+                echo You don't have %~2 installed!
+            )
+        ) else (
+            echo Package %~2 doesn't exist.
+        )
     )
-    echo Installing...
-    powershell -Command "Invoke-WebRequest https://lpm.yaumama.repl.co/%~2/%~2.zip -Outfile %~2.zip"
-    echo Done installing!
-    echo Extracting...
-    powershell -Command "Expand-Archive %~2.zip -DestinationPath ./"
-    del "%~2.zip"
-    echo Extracted!
     exit /b
 )
 
