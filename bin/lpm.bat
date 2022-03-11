@@ -83,6 +83,31 @@ if "%~1" == "uninstall" (
     exit /b
 )
 
+if "%~1" == "update" (
+    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
+        if "%%A"=="200" (
+            if exist "./%~2" (
+                echo Deleting old version...
+                rd /S /Q %~2
+                echo Deleted!
+                echo Reinstalling...
+                powershell -Command "Invoke-WebRequest https://lpm.yaumama.repl.co/%~2/%~2.zip -Outfile %~2.zip"
+                echo Done reinstalling!
+                echo Extracting...
+                powershell -Command "Expand-Archive %~2.zip -DestinationPath ./"
+                del "%~2.zip"
+                echo Extracted!
+                echo Successfully updated %~2!
+            ) else (
+                echo You don't have %~2 installed!
+            )
+        ) else (
+            echo Package %~2 doesn't exist.
+        )
+    )
+    exit /b
+)
+
 if "%~1" == "jitrun" (
     if exist "./%~2" (
         /luajit/luajit.exe %~2
