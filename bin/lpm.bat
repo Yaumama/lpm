@@ -30,7 +30,7 @@ if "%~1" == "browse" (
 
 if "%~1" == "-v" (
     echo LPM version:
-    echo 0.5.0
+    echo 0.5.1
     exit /b
 )
 
