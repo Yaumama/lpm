@@ -34,6 +34,32 @@ if "%~1" == "-v" (
     exit /b
 )
 
+if "%~1" == "jitrun" (
+    if exist "./lpm.lpm" (
+        for /F %%i in (lpm.lpm) do (
+            if exist %%i (
+                %~dp0../luajit/luajit.exe %%i
+            ) else (
+                echo %%i not found!
+            )
+            exit /b
+        )
+    )
+)
+
+if "%~1" == "run" (
+    if exist "./lpm.lpm" (
+        for /F %%i in (lpm.lpm) do (
+            if exist %%i (
+                %~dp0../lua/lua54.exe %%i
+            ) else (
+                echo %%i not found!
+            )
+            exit /b
+        )
+    )
+)
+
 if "%~2" == "" (
     echo Usage: lpm [command] [option]
     exit /b
