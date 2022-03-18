@@ -110,7 +110,7 @@ if "%~1" == "update" (
 
 if "%~1" == "jitrun" (
     if exist "./%~2" (
-        /luajit/luajit.exe %~2
+        %~dp0../luajit/luajit.exe %~2
         exit /b
     ) else (
         echo %~2 not found!
@@ -120,7 +120,7 @@ if "%~1" == "jitrun" (
 
 if "%~1" == "run" (
     if exist "./%~2" (
-        /lua/lua53.exe %~2
+        %~dp0../lua/lua54.exe %~2
         exit /b
     ) else (
         echo %~2 not found!
