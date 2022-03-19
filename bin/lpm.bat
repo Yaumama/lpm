@@ -8,17 +8,31 @@ if "%~1" == "" (
 if "%~1" == "help" (
     echo **************************************
     echo *** LPM Commands:                  ***
+    echo ***--------------------------------***
     echo *** help - This message            ***
+    echo ***--------------------------------***
     echo *** install [package] - Install a  ***
     echo *** package. Get packages from:    ***
     echo *** https://lpm.yaumama.repl.co/   ***
+    echo ***--------------------------------***
+    echo *** uninstall [package] - Uninstall***
+    echo *** a package.                     ***
+    echo ***--------------------------------***
+    echo *** update [package] - Update a    ***
+    echo *** package.                       ***
+    echo ***--------------------------------***
     echo *** browse - Go to the official    ***
     echo *** website of lpm!                ***
+    echo ***--------------------------------***
     echo *** -v - check the version of LPM  ***
+    echo ***--------------------------------***
     echo *** jitrun [lua file] - Runs a lua ***
     echo *** file with luajit.              ***
+    echo ***--------------------------------***
     echo *** run [lua file] - Runs a lua    ***
     echo *** file with regular lua.         ***
+    echo ***--------------------------------***
+    echo *** init - Generates a lpm.lpm file***
     echo **************************************
     exit /b
 )
@@ -30,7 +44,24 @@ if "%~1" == "browse" (
 
 if "%~1" == "-v" (
     echo LPM version:
-    echo 0.5.1
+    echo 0.5.2
+    exit /b
+)
+
+if "%~1" == "init" (
+    if exist lpm.lpm (
+        echo lpm.lpm already exists!
+    ) else (
+        echo ./main.lua>./lpm.lpm
+        echo Created lpm.lpm with main file as "main.lua"!
+    )
+    
+    if exist main.lua (
+        echo main.lua laready exists!
+    ) else (
+        echo -- Code here>./main.lua
+        echo Created main.lua!
+    )
     exit /b
 )
 
