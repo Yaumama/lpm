@@ -65,28 +65,30 @@ if "%~1" == "init" (
     exit /b
 )
 
-if "%~1" == "jitrun" (
-    if exist "./lpm.lpm" (
-        for /F %%i in (lpm.lpm) do (
-            if exist %%i (
-                %~dp0../luajit/luajit.exe %%i
-            ) else (
-                echo %%i not found!
+if "%~2" == "" (
+    if "%~1" == "jitrun" (
+        if exist "./lpm.lpm" (
+            for /F %%i in (lpm.lpm) do (
+                if exist %%i (
+                    %~dp0../luajit/luajit.exe %%i
+                ) else (
+                    echo %%i not found!
+                )
+                exit /b
             )
-            exit /b
         )
     )
-)
 
-if "%~1" == "run" (
-    if exist "./lpm.lpm" (
-        for /F %%i in (lpm.lpm) do (
-            if exist %%i (
-                %~dp0../lua/lua54.exe %%i
-            ) else (
-                echo %%i not found!
+    if "%~1" == "run" (
+        if exist "./lpm.lpm" (
+            for /F %%i in (lpm.lpm) do (
+                if exist %%i (
+                    %~dp0../lua/lua54.exe %%i
+                ) else (
+                    echo %%i not found!
+                )
+                exit /b
             )
-            exit /b
         )
     )
 )
