@@ -129,7 +129,7 @@ if "%~1" == "install" (
 )
 
 if "%~1" == "uninstall" (
-    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
+    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/packages/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
         if "%%A"=="200" (
             if exist "./%~2" (
                 echo [33mDeleting...[0m
