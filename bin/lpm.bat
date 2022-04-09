@@ -13,7 +13,7 @@ if "%~1" == "help" (
     echo ***--------------------------------***
     echo *** install [package] - Install a  ***
     echo *** package. Get packages from:    ***
-    echo *** https://lpm.yaumama.repl.co/   ***
+    echo *** https://lpmlua.com/   ***
     echo ***--------------------------------***
     echo *** uninstall [package] - Uninstall***
     echo *** a package.                     ***
@@ -38,7 +38,7 @@ if "%~1" == "help" (
 )
 
 if "%~1" == "browse" (
-    start "" https://lpm.yaumama.repl.co/
+    start "" https://lpmlua.com/
     exit /b
 )
 
@@ -99,7 +99,7 @@ if "%~2" == "" (
 )
 
 if "%~1" == "install" (
-    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/packages/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
+    for /f %%A in ('curl -sLk https://lpmlua.com/packages/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
         if "%%A"=="200" (
             if exist "./%~2.zip" (
                 echo [91mYou already installed %~2![0m
@@ -109,9 +109,10 @@ if "%~1" == "install" (
                 echo [91mYou already installed %~2![0m
                 exit /b
             )
-            echo [33mInstalling...[0m
-            powershell -Command "Invoke-WebRequest https://lpm.yaumama.repl.co/packages/%~2/%~2.zip -Outfile %~2.zip"
-            echo.
+            echo [33mInstalling...[33m
+            :: powershell -Command "Invoke-WebRequest https://lpmlua.com/packages/%~2/%~2.zip -Outfile %~2.zip"
+            curl -o %~2.zip https://lpmlua.com/packages/%~2/%~2.zip
+            echo [0m
             echo [92mDone installing![0m
             echo [33mExtracting...[0m
             powershell -Command "Expand-Archive %~2.zip -DestinationPath ./"
@@ -121,6 +122,17 @@ if "%~1" == "install" (
             echo.
             echo.
             echo [92mSuccessfully installed %~2![0m
+            if exist %~2 (
+                cd %~2
+                if exist lpmpackage.json (
+                    echo Installing dependencies...
+                    powershell -Command "$json_object = (Get-Content lpmpackage.json | Out-String | ConvertFrom-Json);foreach ($element in $json_object.dependencies) {lpm install $element}"
+                ) else (
+                    cd ../
+                )
+                cd ../
+            )
+            
         ) else (
             echo [91mPackage %~2 doesn't exist.[0m
         )
@@ -129,7 +141,7 @@ if "%~1" == "install" (
 )
 
 if "%~1" == "uninstall" (
-    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/packages/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
+    for /f %%A in ('curl -sLk https://lpmlua.com/packages/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
         if "%%A"=="200" (
             if exist "./%~2" (
                 echo [33mDeleting...[0m
@@ -150,22 +162,15 @@ if "%~1" == "uninstall" (
 )
 
 if "%~1" == "update" (
-    for /f %%A in ('curl -sLk https://lpm.yaumama.repl.co/packages/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
+    for /f %%A in ('curl -sLk https://lpmlua.com/packages/%~2/%~2.zip --write-out "%%{http_code}" -o nul') do (
         if "%%A"=="200" (
             if exist "./%~2" (
                 echo [33mDeleting old version...
                 rd /S /Q %~2
                 echo.
                 echo [92mDeleted![0m
-                echo [33mReinstalling...[0m
-                powershell -Command "Invoke-WebRequest https://lpm.yaumama.repl.co/packages/%~2/%~2.zip -Outfile %~2.zip"
-                echo.
-                echo [92mDone reinstalling![0m
-                echo [33mExtracting...[0m
-                powershell -Command "Expand-Archive %~2.zip -DestinationPath ./"
-                del "%~2.zip"
-                echo.
-                echo [92mExtracted![0m
+                echo [33mReinstalling...
+                lpm install %~2
                 echo.
                 echo.
                 echo [92mSuccessfully updated %~2![0m
