@@ -112,6 +112,7 @@ if "%~1" == "install" (
             echo [33mInstalling...[33m
             :: powershell -Command "Invoke-WebRequest https://lpmlua.com/packages/%~2/%~2.zip -Outfile %~2.zip"
             curl -o %~2.zip https://lpmlua.com/packages/%~2/%~2.zip
+            cmd /c
             echo [0m
             echo [92mDone installing![0m
             echo [33mExtracting...[0m
@@ -179,6 +180,24 @@ if "%~1" == "update" (
             )
         ) else (
             echo [91mPackage %~2 doesn't exist.[0m
+        )
+    )
+    exit /b
+)
+
+if "%~1" == "example" (
+    for /f %%A in ('curl -sLk https://lpmlua.com/packages/%~2/example.lua --write-out "%%{http_code}" -o nul') do (
+        if "%%A"=="200" (
+            if exist "./example.lua" (
+                echo [91mExample.lua already exists in your project.[0m
+            ) else (
+                echo [33mGetting example and putting it in your project...[0m
+                curl -o ./example.lua https://lpmlua.com/packages/%~2/example.lua
+                cmd /c
+                echo [92mExample copied! Created example.lua.[0m
+            )
+        ) else (
+            echo [91mPackage doesn't exist or doesn't have an example file.[0m
         )
     )
     exit /b
